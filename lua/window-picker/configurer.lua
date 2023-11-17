@@ -1,3 +1,6 @@
+local cfilter = require('window-picker.filters.custom-filter')
+local _and = require('window-picker.filters.and-filter')
+
 ---@class Configurer
 ---@field config any
 local M = {}
@@ -68,7 +71,12 @@ end
 
 function M:config_filter(filter)
 	filter:set_config(self.config.filter_rules)
-	return filter
+	local custom_filter = cfilter:new()
+	custom_filter:set_config(self.config.filter_func)
+	return _and:new({
+		filter,
+		custom_filter,
+	})
 end
 
 function M:config_hint(hint)
